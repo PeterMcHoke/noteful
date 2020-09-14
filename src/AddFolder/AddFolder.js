@@ -63,16 +63,17 @@ export default class AddFolder extends React.Component {
                <div className="form-group">
                     { this.state.folderName.touched && <h4 style={{color:"#e37400"}}> {this.validateName() }</h4>}
                  <label htmlFor="name">Name </label>
-                 <input type="text" className="addFolder__control"
+                 <input type="text" className="addFolder__control" aria-label="FolderName" aria-required="true"
                    name="name" id="name" onChange={e => this.updateName(e.target.value)}/>
                </div>
                <div className="registration__button__group">
-                <button type="reset" className="registration__button" id="cancel" onClick={ () => this.props.history.goBack()}>
+                <button type="reset" className="registration__button" id="cancel" aria-label="Cancel" onClick={ () => this.props.history.goBack()}>
                     Cancel
                 </button>
                 <button
                     type="submit"
                     className="registration__button"
+                    aria-label="Save"
                     disabled= {
                         this.validateName()
                     }

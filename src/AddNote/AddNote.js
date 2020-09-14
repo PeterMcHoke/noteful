@@ -73,13 +73,13 @@ export default class AddNote extends React.Component {
 }               <div className="form-group">
                 <div className="input-group">
                      <label htmlFor="name" className="addNote__label">Name </label><br />
-                     <input type="text" className="addNote__control"
+                     <input type="text" className="addNote__control" aria-required="true" aria-label="Name"
                        name="name" id="name" onChange={e => this.updateName(e.currentTarget.value)} value={this.state.noteName.value}/>
                       <br />
                 </div>
                  <div className="input-group">
                      <label htmlFor="content" className="addNote__label">Content </label><br />
-                     <textarea className="addNote__control"
+                     <textarea className="addNote__control" aria-required="true" aria-label="Content"
                        name="content" id="content" onChange={e => this.updateContent(e.currentTarget.value)} style={{margin:"10px 0 0 0"}}>
                        {this.state.content.value}
                       </textarea>
@@ -87,7 +87,7 @@ export default class AddNote extends React.Component {
                 </div>
                 <div className="input-group">
                   <label htmlFor="folderId" className="addNote__label"> Folder </label><br />
-                  <select id="folderId" name="folderId" onChange={e =>  this.updateFolder(e.currentTarget.value) } value={this.state.folderId.value}>
+                  <select id="folderId" name="folderId" aria-required="true" aria-label="Folder"onChange={e =>  this.updateFolder(e.currentTarget.value) } value={this.state.folderId.value}>
                       <option value="">-</option>
                       {this.context.folders.map(f => <option value={f.id}>{f.name}</option>)}
                   </select>

@@ -65,6 +65,7 @@ export default class NoteListNav extends React.Component {
                   to='/add-folder'
                   type='button'
                   className='NoteListNav__add-folder-button'
+                  aria-label="Add-Folder"
                 >
                   <FontAwesomeIcon icon='fa-plus' />
                   <br />

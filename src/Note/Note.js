@@ -25,7 +25,7 @@ export default class Note extends React.Component {
               {this.props.name}
             </Link>
           </h2>
-          <button className='Note__delete' type='button' onClick={this.handleClickDelete}>
+          <button className='Note__delete' type='button' aria-label="Delete"onClick={this.handleClickDelete}>
             <FontAwesomeIcon icon='trash-alt' />
           </button>
           <ErrorHandler>
