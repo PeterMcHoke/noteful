@@ -4,8 +4,10 @@ import NoteListNav from '../NoteListNav/NoteListNav';
 import NoteListMain from '../NoteListMain/NoteListMain'
 import NoteViewNav from '../NoteViewNav/NoteViewNav';
 import NoteViewMain from '../NoteViewMain/NoteViewMain';
-import dummyStore from '../dummy-store';
-import {getNotesForFolder, findNote, findFolder} from '../note-helpers.js';
+import NoteContext from '../NoteContext.js';
+import AddFolder from '../AddFolder/AddFolder';
+import AddNote from '../AddNote/AddNote';
+import config from '../config';
 import './App.css'
 
 class App extends React.Component {
@@ -14,42 +16,66 @@ class App extends React.Component {
         folders: []
     };
 
-  componentDidMount() {
-      setTimeout(() => this.setState(dummyStore), 300);
-  }
+    deleteNote = (noteId) => {
+        this.setState( {
+            notes: this.state.notes.filter( note => note.id !== noteId)
+        });
+    }
+
+    deleteFolder = (folderId) => {
+        this.setState( {
+            folders: this.state.folders.filter( folder => folder.id !== folderId)
+        });
+    }
+
+    addFolder = (newFolder) => {
+        this.setState( {
+            folders: [...this.state.folders,newFolder]
+        })
+    }
+
+    addNote = (note) => {
+        this.setState( {
+            notes: [...this.state.notes, note]
+        })
+    }
+
+    componentDidMount() {
+          Promise.all([
+              fetch(`${config.API_ENDPOINT}/notes`),
+              fetch(`${config.API_ENDPOINT}/folders`)
+          ])
+              .then(([notesRes, foldersRes]) => {
+                  if (!notesRes.ok)
+                      return notesRes.json().then(e => Promise.reject(e));
+                  if (!foldersRes.ok)
+                      return foldersRes.json().then(e => Promise.reject(e));
+
+                  return Promise.all([notesRes.json(), foldersRes.json()]);
+              })
+              .then(([notes, folders]) => {
+                  this.setState({notes, folders});
+              })
+              .catch(error => {
+                  console.error({error});
+              });
+      }
 
   renderNav() {
-      const { notes, folders } = this.state;
-      const folderViewPath = ['/', '/folder/:folderId'];
-
-    return (
+      return (
             <>
                 <header className="AppHeader">
                   <h1> <Link to="/"> Noteful </Link></h1>
                 </header>
-                {folderViewPath.map(path => (
-                    <Route
-                        exact
-                        key={path}
-                        path={path}
-                        render={routeProps => (
-                            <NoteListNav
-                                folders={folders}
-                                notes={notes}
-                                {...routeProps}
-                            />
-                        )}
-                    />
+                {['/', '/folder/:folderId'].map(path => (
+                        <Route
+                            exact
+                            key={path}
+                            path={path}
+                            component={NoteListNav}
+                        />
                 ))}
-                <Route
-                    path="/note/:noteId"
-                    render={routeProps => {
-                        const {noteId} = routeProps.match.params;
-                        const note = findNote(notes, noteId) || {};
-                        const folder = findFolder(folders, note.folderId);
-                        return <NoteViewNav {...routeProps} folder={folder} />;
-                    }}
-                />
+                <Route path="/note/:noteId" component={NoteViewNav} />
                 <Route path="/add-folder" component={NoteViewNav} />
                 <Route path="/add-note" component={NoteViewNav} />
             </>
@@ -57,50 +83,38 @@ class App extends React.Component {
     }
 
     renderMain() {
-        const folderViewPath = ['/', '/folder/:folderId'];
-        const { notes } = this.state;
-
         return (
             <>
-            {folderViewPath.map(path => (
+            {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
                         key={path}
                         path={path}
-                        render={routeProps => {
-                            const {folderId} = routeProps.match.params;
-                            const notesForFolder = getNotesForFolder(
-                                notes,
-                                folderId
-                            );
-                            return (
-                                <NoteListMain
-                                    {...routeProps}
-                                    notes={notesForFolder}
-                                />
-                            );
-                        }}
+                        component={NoteListMain}
                     />
                 ))}
-                <Route
-                    path="/note/:noteId"
-                    render={routeProps => {
-                        const {noteId} = routeProps.match.params;
-                        const note = findNote(notes, noteId);
-                        return <NoteViewMain {...routeProps} note={note} />;
-                    }}
-                />
+                <Route path="/note/:noteId" component={NoteViewMain} />
+                <Route path="/add-folder" component={AddFolder} />
+                <Route path="/add-note" component={AddNote} />
             </>
         )
-
-
     }
 
   render() {
+      const value = {
+          notes: this.state.notes,
+          folders: this.state.folders,
+          deleteNote: this.deleteNote,
+          addFolder: this.addFolder,
+          addNote: this.addNote,
+          deleteFolder: this.deleteFolder,
+      }
     return (
         <div className="App">
-            <nav className="AppNav"> {this.renderNav()} </nav>
-            <main className="AppMain"> {this.renderMain()} </main>
+            <NoteContext.Provider value={value}>
+                <nav className="AppNav"> {this.renderNav()} </nav>
+                <main className="AppMain"> {this.renderMain()} </main>
+            </NoteContext.Provider>
         </div>
     )
   }

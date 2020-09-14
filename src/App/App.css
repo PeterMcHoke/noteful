@@ -4,14 +4,14 @@
 .App {
   font-family: 'Rubik', sans-serif;
   display: grid;
-  grid-template-areas: "sidebar header" "sidebar main";
+  grid-template-areas: "sidebar main" "sidebar main";
   grid-template-columns: 1fr 2.3fr;
   grid-template-rows: 120px 1fr;
   min-height: 100vh;
 }
 
 .AppNav {
-  background-color: #e0e0e0;
+  background-color: #e7e7e7;
   color: #000;
   grid-area: sidebar;
 }
@@ -41,6 +41,11 @@
   background-color: #eeeeee;
   padding-top: 3em;
   padding-left: 2em;
-  height: 100vh;
-  overflow: auto;
+  padding-bottom: 5em;
+  grid-area: main;
+
+}
+
+button, input, select, textarea {
+    outline: 0;
 }
