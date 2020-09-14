@@ -38,6 +38,7 @@
   color: #343434;
   display: block;
   text-decoration: none;
+  transition: 0.1s;
 }
 .Note__title a:hover {
   color: #00c5d9;
