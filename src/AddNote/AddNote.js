@@ -1,8 +1,10 @@
 import React from 'react';
 import NoteContext from '../NoteContext'
-import './AddNote.css'
+import './AddNote.css';
 import cfg from '../config';
-//import ValidationError from './ValidationError';
+import ErrorHandler from '../ErrorHandler/ErrorHandler';
+import ValidationError from '../ValidationError';
+import PropTypes from 'prop-types';
 
 function addNoteAPI(note) {
     return fetch(`${cfg.API_ENDPOINT}/notes`, {
@@ -55,6 +57,9 @@ export default class AddNote extends React.Component {
            this.context.addNote(note);
            this.props.history.push('/');
         });
+        return (
+            <ValidationError message={this.validateName()}/>
+        )
     }
 
     validateName() {
@@ -64,21 +69,32 @@ export default class AddNote extends React.Component {
         }
     }
 
+    validateContent() {
+        const content = this.state.content.value.trim();
+        if (content.length === 0) {
+            return 'I think you forgot to actually write a note 😅';
+        }
+    }
+
 
     render() {
         return (
+            <ErrorHandler>
              <form className="addNote" onSubmit={e => this.handleSubmit(e)}>
                <h2>Add Note</h2>
- {//               <div className="addNote__hint">* required field</div>
-}               <div className="form-group">
+                <div className="form-group">
                 <div className="input-group">
                      <label htmlFor="name" className="addNote__label">Name </label><br />
+                     { this.state.noteName.touched && <ValidationError message={this.validateName()}/> }
+                     { !this.state.noteName.touched && (this.state.content.touched || this.state.folderId.touched) && <ValidationError message={this.validateName()}/> }
                      <input type="text" className="addNote__control" aria-required="true" aria-label="Name"
                        name="name" id="name" onChange={e => this.updateName(e.currentTarget.value)} value={this.state.noteName.value}/>
                       <br />
                 </div>
                  <div className="input-group">
                      <label htmlFor="content" className="addNote__label">Content </label><br />
+                     { this.state.content.touched && <ValidationError message={this.validateContent()}/> }
+                     { !this.state.content.touched && this.state.folderId.touched && <ValidationError message={this.validateContent()}/> }
                      <textarea className="addNote__control" aria-required="true" aria-label="Content"
                        name="content" id="content" onChange={e => this.updateContent(e.currentTarget.value)} style={{margin:"10px 0 0 0"}}>
                        {this.state.content.value}
@@ -108,6 +124,14 @@ export default class AddNote extends React.Component {
                 </button>
                </div>
              </form>
+             </ErrorHandler>
          )
     }
+}
+
+
+AddNote.propTypes = {
+    history: PropTypes.isRequired,
+    location: PropTypes.isRequired,
+    match: PropTypes.isRequired
 }

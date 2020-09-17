@@ -3,23 +3,22 @@
   color: #343434;
   height: var(--note-height);
   margin-bottom: 10px;
-  max-width: 380px;
   padding: 8px 0 8px 8px;
   position: relative;
 }
 
 .Note__delete {
-  --note-button-height: 32px;
-  border: 0;
-  border-radius: 10px;
-  color: #b8b8b8;
-  float: right;
-  font-size: 12px;
-  padding: 1em;
-  text-align: center;
-  margin: auto;
-  font-weight: bold;
-
+    --note-button-height: 32px;
+    border: 0;
+    border-radius: 10px;
+    color: #b8b8b8;
+    float: right;
+    font-size: 12px;
+    padding: 1em;
+    text-align: center;
+    margin: auto;
+    font-weight: bold;
+    margin-right: 80px;
 
 }
 .Note__delete:hover {
