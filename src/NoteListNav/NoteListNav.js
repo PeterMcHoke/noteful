@@ -5,6 +5,8 @@ import CircleButton from '../CircleButton/CircleButton'
 import NoteContext from '../NoteContext';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {countNotesForFolder} from '../note-helpers';
+import ErrorHandler from '../ErrorHandler/ErrorHandler'
+
 
 export default class NoteListNav extends React.Component {
     static contextType = NoteContext;
@@ -14,7 +16,9 @@ export default class NoteListNav extends React.Component {
             folders = [],
             notes = []
         } = this.context;
-        return (<div className='NoteListNav'>
+        return (
+        <ErrorHandler>
+        <div className='NoteListNav'>
             <ul className='NoteListNav__list'>
                 {
                     folders.map(folder => <li key={folder.id}>
@@ -34,6 +38,8 @@ export default class NoteListNav extends React.Component {
                     Add Folder
                 </CircleButton>
             </div>
-        </div>)
+        </div>
+        </ErrorHandler>
+        )
     }
 }
