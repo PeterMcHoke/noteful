@@ -6,7 +6,8 @@ import CircleButton from '../CircleButton/CircleButton'
 import NoteContext from '../NoteContext';
 import './NoteListMain.css'
 import {getNotesForFolder} from '../note-helpers.js';
-import ErrorHandler from '../ErrorHandler/ErrorHandler'
+import ErrorHandler from '../ErrorHandler/ErrorHandler';
+import PropTypes from 'prop-types';
 
 
 
@@ -65,4 +66,8 @@ export default class NoteListMain extends React.Component {
         </section>
       )
 }
+}
+
+NoteListMain.propTypes = {
+    match: PropTypes.isRequired
 }
