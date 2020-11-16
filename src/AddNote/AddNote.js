@@ -100,8 +100,7 @@ export default class AddNote extends React.Component {
         const note = {
             name: noteName.value,
             folderId: folderId.value,
-            content: content.value,
-            modified: new Date()
+            content: content.value
         }
         addNoteAPI(note).then((note) => {
             this.context.addNote(note);
@@ -139,7 +138,7 @@ export default class AddNote extends React.Component {
                         </label><br/>
                         <select id="folderId" name="folderId" aria-required="true" aria-label="Folder" onChange={e => this.updateFolder(e.currentTarget.value)} value={this.state.folderId.value}>
                             <option value="">-</option>
-                            {this.context.folders.map(f => <option value={f.id}>{f.name}</option>)}
+                            {this.context.folders.map(f => <option value={f.id}>{f.title}</option>)}
                         </select>
                     </div>
                 </div>

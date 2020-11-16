@@ -53,7 +53,7 @@ export default class AddFolder extends React.Component {
         event.preventDefault();
         this.submitButtonClick();
         const {folderName} = this.state;
-        addFolderAPI({name: folderName.value}).then(folder => {
+        addFolderAPI({title: folderName.value}).then(folder => {
             console.log(folder);
             this.context.addFolder(folder);
             this.props.history.push('/');

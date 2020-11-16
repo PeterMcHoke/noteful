@@ -21,7 +21,7 @@ export default class NoteViewMain extends React.Component {
         const {
             notes = []
         } = this.context
-        const {noteId} = this.props.match.params
+        const noteId = Number(this.props.match.params.noteId)
         const note = findNote(notes, noteId) || {
             content: ''
         }
